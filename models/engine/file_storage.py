@@ -27,10 +27,8 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r') as f:
                 obj_dict = json.load(f)
-                print("Object data loaded from JSON:", obj_dict)
                 for key, value in obj_dict.items():
                     class_name = value["__class__"]
-                    print(f"Reloading object: {key} (class: {class_name})")
                     if class_name == "BaseModel":
                         self.__objects[key] = BaseModel(**value)
         except FileNotFoundError:
