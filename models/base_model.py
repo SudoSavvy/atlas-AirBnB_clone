@@ -25,9 +25,10 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """Return a dictionary representation of the instance."""
-        dict_rep = self.__dict__.copy()
-        dict_rep['__class__'] = self.__class__.__name__
-        dict_rep['created_at'] = self.created_at.isoformat()
-        dict_rep['updated_at'] = self.updated_at.isoformat()
-        return dict_rep
+        """Returns a dictionary containing all keys/values of the instance."""
+        obj_dict = self.__dict__.copy()
+        obj_dict["__class__"] = self.__class__.__name__
+        obj_dict["created_at"] = self.created_at.isoformat()
+        obj_dict["updated_at"] = self.updated_at.isoformat()
+        return obj_dict
+
