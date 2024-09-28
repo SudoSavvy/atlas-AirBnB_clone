@@ -1,35 +1,31 @@
-from datetime import datetime
 import uuid
-from models import storage
+from datetime import datetime
 
 class BaseModel:
-    """Defines all common attributes and methods for other classes."""
-    
+    """BaseModel defines all common attributes and methods for other classes."""
+
     def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel instance."""
         if kwargs:
             for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    setattr(self, key, datetime.fromisoformat(value))
-                elif key != '__class__':
+                if key == 'created_at' or key == 'updated_at':
+                    value = datetime.fromisoformat(value)
+                if key != '__class__':
                     setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
-
-    def __str__(self):
-        """Return a string representation of the BaseModel instance."""
-        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+            self.save()
 
     def save(self):
-        """Updates `updated_at` and calls storage to save the object."""
+        """Save the object by updating 'updated_at' and calling storage's save."""
         self.updated_at = datetime.now()
+        from models import storage
         storage.save()
 
     def to_dict(self):
-        """Returns a dictionary representation of the instance."""
+        """Return a dictionary representation of the instance."""
         dict_rep = self.__dict__.copy()
         dict_rep['__class__'] = self.__class__.__name__
         dict_rep['created_at'] = self.created_at.isoformat()
