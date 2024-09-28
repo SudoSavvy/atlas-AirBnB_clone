@@ -4,11 +4,25 @@ from datetime import datetime  # Import datetime for handling date and time
 class BaseModel:
     """BaseModel defines all common attributes and methods for other classes."""
 
-    def __init__(self):
-        """Initialize a new BaseModel instance with unique ID and timestamps."""
-        self.id = str(uuid.uuid4())  # Generate a unique ID and convert it to a string
-        self.created_at = datetime.now()  # Set the creation time to the current datetime
-        self.updated_at = datetime.now()  # Set the updated time to the current datetime
+    def __init__(self, *args, **kwargs):
+        """Initialize a new BaseModel instance.
+        If kwargs is provided, use it to recreate the instance from a dictionary.
+        Otherwise, create a new instance with unique ID and timestamps.
+        """
+        if kwargs:
+            # Iterate over kwargs to set each attribute
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    # Convert string to datetime for these attributes
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                if key != '__class__':
+                    # Set the attribute on the instance, but ignore __class__
+                    setattr(self, key, value)
+        else:
+            # Create a new instance with unique ID and current timestamps
+            self.id = str(uuid.uuid4())  # Generate a unique ID
+            self.created_at = datetime.now()  # Set the creation time
+            self.updated_at = datetime.now()  # Set the update time
 
     def __str__(self):
         """Return a string representation of the BaseModel instance."""
