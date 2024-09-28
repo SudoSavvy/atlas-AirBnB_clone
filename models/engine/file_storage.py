@@ -29,7 +29,10 @@ class FileStorage:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     class_name = value["__class__"]
-                    if class_name == "BaseModel":
-                        self.__objects[key] = BaseModel(**value)
+                    # Dynamically get the class from globals or import
+                    cls = globals().get(class_name)
+                    if cls:
+                        self.__objects[key] = cls(**value)
         except FileNotFoundError:
             pass
+
