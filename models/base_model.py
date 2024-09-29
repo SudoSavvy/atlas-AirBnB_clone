@@ -4,6 +4,14 @@ from datetime import datetime
 class BaseModel:
     """BaseModel defines all common attributes and methods for other classes."""
 
+    def __str__(self):
+        """Return string representation of the BaseModel instance."""
+        return "[BaseModel]"
+    
+    def __eq__(self, other):
+        """To compare BaseModel objects."""
+        return type(self) == type(other)
+    
     def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel instance."""
         if kwargs:
