@@ -1,5 +1,7 @@
 import unittest
+import datetime  # Import datetime module
 from models.base_model import BaseModel
+from models.file_storage import FileStorage  # Ensure FileStorage is imported
 
 
 class TestBaseModel(unittest.TestCase):
