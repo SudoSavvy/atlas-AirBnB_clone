@@ -104,7 +104,7 @@ class HBNBCommand(cmd.Cmd):
         obj_id = args[1]
         attr_name = args[2]
         attr_value = args[3]
-        
+
         if class_name not in [
             "BaseModel", "Place", "State", "City", "Amenity", "Review"
         ]:
