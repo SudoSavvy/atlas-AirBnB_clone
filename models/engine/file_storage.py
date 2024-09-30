@@ -31,8 +31,10 @@ class FileStorage:
 
     def to_dict(self):
         """Converts all stored objects to a dictionary format."""
-        return {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
-
+        return {
+            key: obj.to_dict() 
+            for key, obj in FileStorage.__objects.items()
+    }
     def reload(self):
         """Loads the stored objects from a JSON file."""
         try:
