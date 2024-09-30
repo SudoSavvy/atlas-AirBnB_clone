@@ -24,13 +24,10 @@ class FileStorage:
 
     def reload(self):
         """Loads the objects from a JSON file."""
-        # Check if the file exists before attempting to read
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r') as file:
                 objs = json.load(file)
                 for key, value in objs.items():
                     cls_name = value.pop('__class__')
                     self.new(eval(cls_name)(**value))
-        else:
-            # Optionally print a message or log the event
-            print(f"{self.__file_path} not found. No data loaded.")
+        # Optionally, you can handle the case where the file does not exist silently
