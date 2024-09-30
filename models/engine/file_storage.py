@@ -30,8 +30,3 @@ class FileStorage:
                 for key, value in objs.items():
                     cls_name = value.pop('__class__')
                     self.new(eval(cls_name)(**value))
-try:
-    with open(file_path, "r") as file:
-        data = json.load(file)
-except FileNotFoundError:
-    data = {}  # or handle this case appropriately
