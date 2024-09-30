@@ -1,34 +1,57 @@
 import json
-import os
 from models.base_model import BaseModel
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class FileStorage:
-    """Class that serializes and deserializes instances to and from a JSON file."""
+    """FileStorage class to manage storage of model instances in JSON format."""
 
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """Returns the dictionary of objects."""
-        return self.__objects
+        """Returns the dictionary of stored objects."""
+        return FileStorage.__objects
 
     def new(self, obj):
-        """Adds a new object to the storage dictionary."""
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        self.__objects[key] = obj
+        """Adds a new object to the storage."""
+        if obj:
+            key = f"{type(obj).__name__}.{obj.id}"
+            FileStorage.__objects[key] = obj
 
     def save(self):
-        """Saves the objects to a JSON file."""
-        with open(self.__file_path, 'w') as file:
-            json.dump({key: obj.to_dict() for key, obj in self.__objects.items()}, file)
+        """Saves the stored objects to a JSON file."""
+        with open(FileStorage.__file_path, 'w') as f:
+            json.dump(self.to_dict(), f)
+
+    def to_dict(self):
+        """Converts all stored objects to a dictionary format."""
+        return {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
 
     def reload(self):
-        """Loads the objects from a JSON file."""
-        # Only attempt to load if the file exists
-        if os.path.exists(self.__file_path):
-            with open(self.__file_path, 'r') as file:
-                objs = json.load(file)
-                for key, value in objs.items():
-                    cls_name = value.pop('__class__')
-                    self.new(eval(cls_name)(**value))
-        # Do nothing if the file does not exist
+        """Loads the stored objects from a JSON file."""
+        try:
+            with open(FileStorage.__file_path, 'r') as f:
+                objects = json.load(f)
+                for key, value in objects.items():
+                    class_name = value["__class__"]
+                    if class_name == "BaseModel":
+                        obj = BaseModel(**value)
+                    elif class_name == "Place":
+                        obj = Place(**value)
+                    elif class_name == "State":
+                        obj = State(**value)
+                    elif class_name == "City":
+                        obj = City(**value)
+                    elif class_name == "Amenity":
+                        obj = Amenity(**value)
+                    elif class_name == "Review":
+                        obj = Review(**value)
+                    else:
+                        continue
+                    self.new(obj)
+        except FileNotFoundError:
+            pass  # Handle case when file does not exist
