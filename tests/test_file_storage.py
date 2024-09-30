@@ -15,7 +15,7 @@ class TestFileStorage(unittest.TestCase):
         fs = FileStorage()
         self.assertEqual(fs.all(), {})
 
-    # Add more tests as necessary
+    # Add more tests for your FileStorage class
 
 if __name__ == '__main__':
     unittest.main()
