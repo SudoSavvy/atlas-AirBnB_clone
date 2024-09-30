@@ -1,7 +1,11 @@
+"""
+Console module for the AirBnB clone project.
+"""
+
 import cmd
 
 class HBNBCommand(cmd.Cmd):
-    """Command interpreter for AirBnB clone."""
+    """Command interpreter for the AirBnB clone."""
 
     prompt = "(hbnb) "
 
