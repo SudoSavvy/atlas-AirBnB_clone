@@ -6,6 +6,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """FileStorage class to manage storage of model instances in JSON format."""
 
