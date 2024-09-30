@@ -1,18 +1,13 @@
 #!/usr/bin/python3
-# Importing the BaseModel class from the base_model module
+"""Module that defines the City class."""
 from models.base_model import BaseModel
 
-# Defining the City class, which inherits from BaseModel
 class City(BaseModel):
-    """
-    City class that inherits from BaseModel.
-    Represents a city with state_id and name attributes.
-    """
-    
-    # Public class attribute 'state_id', initialized to an empty string
-    # Will store the ID of the State the city belongs to
-    state_id = ""
-    
-    # Public class attribute 'name', initialized to an empty string
-    # Represents the name of the city
-    name = ""
+    """City class that inherits from BaseModel."""
+
+    state_id = ""  # Public class attribute representing the state ID, initialized as an empty string.
+    name = ""      # Public class attribute representing the city name, initialized as an empty string.
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the City instance, calling the parent constructor."""
+        super().__init__(*args, **kwargs)  # Call the super class (BaseModel) constructor.

@@ -1,54 +1,22 @@
 #!/usr/bin/python3
-# Importing the BaseModel class from the base_model module
+"""Module that defines the Place class."""
 from models.base_model import BaseModel
 
-# Defining the Place class, which inherits from BaseModel
 class Place(BaseModel):
-    """
-    Place class that inherits from BaseModel.
-    Represents a place with various attributes including city_id, user_id, and more.
-    """
-    
-    # Public class attribute 'city_id', initialized to an empty string
-    # Will store the ID of the City the place is located in
-    city_id = ""
-    
-    # Public class attribute 'user_id', initialized to an empty string
-    # Will store the ID of the User who owns the place
-    user_id = ""
-    
-    # Public class attribute 'name', initialized to an empty string
-    # Represents the name of the place
-    name = ""
-    
-    # Public class attribute 'description', initialized to an empty string
-    # Represents the description of the place
-    description = ""
-    
-    # Public class attribute 'number_rooms', initialized to 0
-    # Represents the number of rooms in the place
-    number_rooms = 0
-    
-    # Public class attribute 'number_bathrooms', initialized to 0
-    # Represents the number of bathrooms in the place
-    number_bathrooms = 0
-    
-    # Public class attribute 'max_guest', initialized to 0
-    # Represents the maximum number of guests the place can accommodate
-    max_guest = 0
-    
-    # Public class attribute 'price_by_night', initialized to 0
-    # Represents the price per night for staying at the place
-    price_by_night = 0
-    
-    # Public class attribute 'latitude', initialized to 0.0
-    # Represents the latitude of the place's location
-    latitude = 0.0
-    
-    # Public class attribute 'longitude', initialized to 0.0
-    # Represents the longitude of the place's location
-    longitude = 0.0
-    
-    # Public class attribute 'amenity_ids', initialized to an empty list
-    # Will store a list of Amenity IDs that belong to the place
-    amenity_ids = []
+    """Place class that inherits from BaseModel."""
+
+    city_id = ""         # Public class attribute representing the city ID, initialized as an empty string.
+    user_id = ""         # Public class attribute representing the user ID, initialized as an empty string.
+    name = ""            # Public class attribute representing the name of the place, initialized as an empty string.
+    description = ""     # Public class attribute representing the description of the place, initialized as an empty string.
+    number_rooms = 0     # Public class attribute representing the number of rooms, initialized as 0.
+    number_bathrooms = 0 # Public class attribute representing the number of bathrooms, initialized as 0.
+    max_guest = 0        # Public class attribute representing the maximum number of guests, initialized as 0.
+    price_by_night = 0   # Public class attribute representing the price per night, initialized as 0.
+    latitude = 0.0       # Public class attribute representing the latitude of the place, initialized as 0.0.
+    longitude = 0.0      # Public class attribute representing the longitude of the place, initialized as 0.0.
+    amenity_ids = []     # Public class attribute representing a list of amenity IDs, initialized as an empty list.
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the Place instance, calling the parent constructor."""
+        super().__init__(*args, **kwargs)  # Call the super class (BaseModel) constructor.
