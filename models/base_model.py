@@ -1,6 +1,10 @@
+import uuid
+from datetime import datetime
+
+
 class BaseModel:
     """Base model for all classes."""
-    
+
     def __init__(self, *args, **kwargs):
         """Initializes a BaseModel instance."""
         if kwargs:
