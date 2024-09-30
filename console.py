@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             instance = self.classes[arg]()
-            instance.save()
+            instance.save()  # Save the instance to the file
             print(instance.id)
 
     def do_show(self, arg):
@@ -57,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 del storage.all()[key]
-                storage.save()
+                storage.save()  # Save after deletion
 
     def do_all(self, arg):
         """Prints all string representations of all instances, or instances of a class."""
@@ -92,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
                 attr_name = args[2]
                 attr_value = args[3].strip('"')
                 setattr(instance, attr_name, attr_value)
-                instance.save()
+                instance.save()  # Save updated instance
 
     def emptyline(self):
         """Do nothing on empty input."""
