@@ -5,7 +5,7 @@ Console module for the AirBnB clone project.
 
 import cmd
 from models.base_model import BaseModel
-from models import storage  # Make sure your storage system is correctly set up
+from models import storage  # Ensure your storage system is correctly set up
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the AirBnB clone."""
@@ -23,10 +23,6 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Do nothing on empty input."""
         pass
-
-    def do_help(self, arg):
-        """Display help information for commands."""
-        super().do_help(arg)
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel, saves it and prints the id."""
@@ -58,7 +54,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        instance_id = args[1]
+        instance_id = args[1].strip('"')  # Handle quotes
         instance = storage.get(class_name, instance_id)  # Implement get method in your storage
 
         if instance is None:
@@ -83,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        instance_id = args[1]
+        instance_id = args[1].strip('"')  # Handle quotes
         instance = storage.get(class_name, instance_id)
 
         if instance is None:
@@ -91,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         storage.delete(class_name, instance_id)  # Implement delete method in your storage
-        instance.save()  # Save changes to JSON file
+        print("Instance deleted successfully.")  # Optional confirmation
 
     def do_all(self, arg):
         """Prints all string representation of all instances based on the class name."""
@@ -118,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        instance_id = args[1]
+        instance_id = args[1].strip('"')  # Handle quotes
         instance = storage.get(class_name, instance_id)
 
         if instance is None:
