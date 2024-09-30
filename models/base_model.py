@@ -1,37 +1,38 @@
+#!/usr/bin/python3
+"""Module that defines the BaseModel class."""
 import uuid
 from datetime import datetime
-from models import storage  # Corrected import
 
 class BaseModel:
-    """BaseModel class that defines common attributes and methods for other classes."""
+    """BaseModel class that defines all common attributes/methods for other classes."""
 
     def __init__(self, *args, **kwargs):
-        """Initialize the BaseModel instance."""
+        """Initialize a new BaseModel instance."""
         if kwargs:
             for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    value = datetime.fromisoformat(value)
                 if key != "__class__":
                     setattr(self, key, value)
+            if "created_at" in kwargs:
+                self.created_at = datetime.strptime(kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f")
+            if "updated_at" in kwargs:
+                self.updated_at = datetime.strptime(kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f")
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.id = str(uuid.uuid4())  # Generate a unique ID
+            self.created_at = datetime.now()  # Set the creation time to now
+            self.updated_at = self.created_at  # Set the updated time to the same as creation
+            from models import storage  # Delayed import to avoid circular import
+            storage.new(self)  # Add the new instance to storage
 
     def save(self):
-        """Updates the updated_at attribute and saves the instance."""
-        self.updated_at = datetime.now()
-        storage.new(self)  # Use the global storage instance
-        storage.save()
-
-    def __str__(self):
-        """Returns the string representation of the BaseModel."""
-        return f"[{self.__class__.__name__}] ({self.id}) {self.to_dict()}"
+        """Update the updated_at attribute and save the object to file storage."""
+        self.updated_at = datetime.now()  # Update the time of last modification
+        from models import storage  # Delayed import to avoid circular import
+        storage.save()  # Save the instance to file storage
 
     def to_dict(self):
-        """Returns a dictionary representation of the BaseModel."""
-        return {
-            'id': self.id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
-        }
+        """Return a dictionary containing all keys/values of the instance."""
+        my_dict = self.__dict__.copy()  # Copy the instance attributes to a new dictionary
+        my_dict["__class__"] = self.__class__.__name__  # Add the class name to the dictionary
+        my_dict["created_at"] = self.created_at.isoformat()  # Convert created_at to string format
+        my_dict["updated_at"] = self.updated_at.isoformat()  # Convert updated_at to string format
+        return my_dict
