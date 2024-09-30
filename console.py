@@ -1,124 +1,116 @@
 import cmd
-import sys
+from models.file_storage import FileStorage
 from models.base_model import BaseModel
-from models import storage
 
 class HBNBCommand(cmd.Cmd):
-    """Command interpreter for the HBNB AirBnB clone."""
+    """Command interpreter for the AirBnB clone."""
+
     prompt = '(hbnb) '
+    storage = FileStorage()
 
-    def do_create(self, arg):
-        """Creates a new instance of BaseModel, saves it, and prints the id."""
-        if not arg:
+    def do_create(self, class_name):
+        """Creates a new instance of BaseModel."""
+        if not class_name:
             print("** class name missing **")
             return
-        
-        if arg != "BaseModel":
+        if class_name not in ["BaseModel"]:  # Add other valid classes as needed
             print("** class doesn't exist **")
             return
-        
-        instance = BaseModel()
-        instance.save()
-        print(instance.id)
+        instance = eval(class_name)()  # Create a new instance of the class
+        instance.save()  # Save the instance
+        print(instance.id)  # Print the id of the created instance
 
-    def do_show(self, arg):
+    def do_show(self, args):
         """Prints the string representation of an instance based on the class name and id."""
-        args = arg.split()
         if not args:
             print("** class name missing **")
             return
-        
+        args = args.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
         class_name = args[0]
-        if class_name != "BaseModel":
+        if class_name not in ["BaseModel"]:  # Add other valid classes as needed
             print("** class doesn't exist **")
             return
-        
         if len(args) < 2:
             print("** instance id missing **")
             return
-        
         instance_id = args[1]
-        instance = storage.get(class_name, instance_id)
-        if not instance:
+        key = f"{class_name}.{instance_id}"
+        if key not in self.storage.all():
             print("** no instance found **")
             return
-        
-        print(instance)
+        print(self.storage.all()[key])
 
-    def do_destroy(self, arg):
+    def do_destroy(self, args):
         """Deletes an instance based on the class name and id."""
-        args = arg.split()
         if not args:
             print("** class name missing **")
             return
-        
+        args = args.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
         class_name = args[0]
-        if class_name != "BaseModel":
+        if class_name not in ["BaseModel"]:  # Add other valid classes as needed
             print("** class doesn't exist **")
             return
-        
         if len(args) < 2:
             print("** instance id missing **")
             return
-        
         instance_id = args[1]
-        if storage.destroy(class_name, instance_id):
-            print(f"Instance {instance_id} destroyed.")
+        key = f"{class_name}.{instance_id}"
+        if key not in self.storage.all():
+            print("** no instance found **")
+            return
+        del self.storage.all()[key]
+        self.storage.save()
+
+    def do_all(self, class_name=None):
+        """Prints all string representation of all instances."""
+        if class_name and class_name not in ["BaseModel"]:  # Add other valid classes as needed
+            print("** class doesn't exist **")
+            return
+        all_instances = self.storage.all()
+        if class_name:
+            instances = [str(v) for k, v in all_instances.items() if k.startswith(class_name)]
         else:
-            print("** no instance found **")
+            instances = [str(v) for v in all_instances.values()]
+        print(instances)
 
-    def do_all(self, arg):
-        """Prints all string representation of all instances, or instances of a specific class."""
-        if arg and arg != "BaseModel":
-            print("** class doesn't exist **")
-            return
-        
-        instances = storage.all(arg)
-        print([str(instance) for instance in instances])
-
-    def do_update(self, arg):
-        """Updates an instance based on the class name and id by adding or updating an attribute."""
-        args = arg.split()
+    def do_update(self, args):
+        """Updates an instance based on the class name and id by adding or updating attribute."""
         if not args:
             print("** class name missing **")
             return
-        
+        args = args.split()
+        if len(args) < 1:
+            print("** class name missing **")
+            return
         class_name = args[0]
-        if class_name != "BaseModel":
+        if class_name not in ["BaseModel"]:  # Add other valid classes as needed
             print("** class doesn't exist **")
             return
-        
         if len(args) < 2:
             print("** instance id missing **")
             return
-        
         instance_id = args[1]
-        instance = storage.get(class_name, instance_id)
-        if not instance:
+        key = f"{class_name}.{instance_id}"
+        if key not in self.storage.all():
             print("** no instance found **")
             return
-        
         if len(args) < 3:
             print("** attribute name missing **")
             return
-        
         attribute_name = args[2]
         if len(args) < 4:
             print("** value missing **")
             return
-        
-        attribute_value = arg.split(' ', 3)[3].strip('"')
-        setattr(instance, attribute_name, attribute_value)
+        value = args[3].strip('"')  # Remove quotes
+        instance = self.storage.all()[key]
+        setattr(instance, attribute_name, value)
         instance.save()
-
-    def do_quit(self, arg):
-        """Exits the command interpreter."""
-        sys.exit()
-
-    def do_EOF(self, arg):
-        """Handles the End Of File (CTRL+D) to exit the interpreter."""
-        print()
-        return True
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
