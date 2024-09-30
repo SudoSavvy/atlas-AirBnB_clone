@@ -99,7 +99,11 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
 
-        class_name, obj_id, attr_name, attr_value = args[0], args[1], args[2], args[3]
+        class_name = args[0]
+        obj_id = args[1]
+        attr_name = args[2]
+        attr_value = args[3]
+        
         if class_name not in [
             "BaseModel", "Place", "State", "City", "Amenity", "Review"
         ]:
