@@ -8,7 +8,8 @@ from models.review import Review
 
 
 class FileStorage:
-    """FileStorage class to manage storage of model instances in JSON format."""
+    """FileStorage class to manage
+    storage of model instances in JSON format."""
 
     __file_path = "file.json"
     __objects = {}
