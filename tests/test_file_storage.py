@@ -1,13 +1,12 @@
+# tests/test_file_storage.py
 import unittest
-from models.file_storage import FileStorage
+from models.file_storage import FileStorage  # Ensure the import path is correct
 
 class TestFileStorage(unittest.TestCase):
-    def test_initialization(self):
-        """Test initialization of FileStorage"""
-        fs = FileStorage()
-        self.assertIsInstance(fs, FileStorage)
-
-# Add more tests as necessary
+    def test_instance(self):
+        """Test that FileStorage instance is created correctly"""
+        storage = FileStorage()
+        self.assertIsInstance(storage, FileStorage)
 
 if __name__ == '__main__':
     unittest.main()
