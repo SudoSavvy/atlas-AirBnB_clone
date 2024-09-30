@@ -27,5 +27,7 @@ class BaseModel:
     def save(self):
         """Updates the updated_at attribute and saves the instance."""
         self.updated_at = datetime.now()
+        global storage  # Make sure to declare storage as global
         storage.new(self)
         storage.save()
+        
