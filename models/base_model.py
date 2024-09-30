@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-import models.storage
+from models import storage  # Corrected import
 
 class BaseModel:
     """BaseModel class that defines common attributes and methods for other classes."""
@@ -21,8 +21,8 @@ class BaseModel:
     def save(self):
         """Updates the updated_at attribute and saves the instance."""
         self.updated_at = datetime.now()
-        models.storage.storage.new(self)  # Use the global storage instance
-        models.storage.storage.save()
+        storage.new(self)  # Use the global storage instance
+        storage.save()
 
     def __str__(self):
         """Returns the string representation of the BaseModel."""

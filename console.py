@@ -1,12 +1,11 @@
 import cmd
-from models.file_storage import FileStorage
+from models import storage  # Use the storage from models
 from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the AirBnB clone."""
 
     prompt = '(hbnb) '
-    storage = FileStorage()
 
     def do_create(self, class_name):
         """Creates a new instance of BaseModel."""
@@ -38,10 +37,10 @@ class HBNBCommand(cmd.Cmd):
             return
         instance_id = args[1]
         key = f"{class_name}.{instance_id}"
-        if key not in self.storage.all():
+        if key not in storage.all():
             print("** no instance found **")
             return
-        print(self.storage.all()[key])
+        print(storage.all()[key])
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id."""
@@ -61,18 +60,18 @@ class HBNBCommand(cmd.Cmd):
             return
         instance_id = args[1]
         key = f"{class_name}.{instance_id}"
-        if key not in self.storage.all():
+        if key not in storage.all():
             print("** no instance found **")
             return
-        del self.storage.all()[key]
-        self.storage.save()
+        del storage.all()[key]
+        storage.save()
 
     def do_all(self, class_name=None):
         """Prints all string representation of all instances."""
         if class_name and class_name not in ["BaseModel"]:  # Add other valid classes as needed
             print("** class doesn't exist **")
             return
-        all_instances = self.storage.all()
+        all_instances = storage.all()
         if class_name:
             instances = [str(v) for k, v in all_instances.items() if k.startswith(class_name)]
         else:
@@ -97,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
             return
         instance_id = args[1]
         key = f"{class_name}.{instance_id}"
-        if key not in self.storage.all():
+        if key not in storage.all():
             print("** no instance found **")
             return
         if len(args) < 3:
@@ -108,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
         value = args[3].strip('"')  # Remove quotes
-        instance = self.storage.all()[key]
+        instance = storage.all()[key]
         setattr(instance, attribute_name, value)
         instance.save()
 
