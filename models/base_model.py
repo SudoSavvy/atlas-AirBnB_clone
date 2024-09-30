@@ -1,31 +1,42 @@
-from uuid import uuid4
+import uuid
 from datetime import datetime
-from models import storage
 
 class BaseModel:
-    """Base class for all models."""
+    """BaseModel defines all common attributes and methods for other classes."""
+
+    def __str__(self):
+        """Return string representation of the BaseModel instance."""
+        return "[BaseModel]"
+    
+    def __eq__(self, other):
+        """To compare BaseModel objects."""
+        return type(self) == type(other)
     
     def __init__(self, *args, **kwargs):
+        """Initialize a new BaseModel instance."""
         if kwargs:
             for key, value in kwargs.items():
-                if key != "__class__":
+                if key == 'created_at' or key == 'updated_at':
+                    value = datetime.fromisoformat(value)
+                if key != '__class__':
                     setattr(self, key, value)
-            self.created_at = datetime.fromisoformat(kwargs['created_at'])
-            self.updated_at = datetime.fromisoformat(kwargs['updated_at'])
         else:
-            self.id = str(uuid4())
-            self.created_at = self.updated_at = datetime.now()
-            storage.new(self)  # Call FileStorage's new() to register instance
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            self.save()
 
     def save(self):
-        """Updates `updated_at` and calls storage.save()."""
+        """Save the object by updating 'updated_at' and calling storage's save."""
         self.updated_at = datetime.now()
-        storage.save()  # Call FileStorage's save() to write to JSON
+        from models import storage
+        storage.save()
 
     def to_dict(self):
-        """Converts instance to dictionary for JSON serialization."""
-        my_dict = self.__dict__.copy()
-        my_dict['created_at'] = self.created_at.isoformat()
-        my_dict['updated_at'] = self.updated_at.isoformat()
-        my_dict['__class__'] = self.__class__.__name__
-        return my_dict
+        """Returns a dictionary containing all keys/values of the instance."""
+        obj_dict = self.__dict__.copy()
+        obj_dict["__class__"] = self.__class__.__name__
+        obj_dict["created_at"] = self.created_at.isoformat()
+        obj_dict["updated_at"] = self.updated_at.isoformat()
+        return obj_dict
+
