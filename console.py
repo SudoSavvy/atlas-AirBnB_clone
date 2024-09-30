@@ -1,24 +1,25 @@
 import cmd
 
 class HBNBCommand(cmd.Cmd):
-    """Command interpreter for the AirBnB project."""
+    """Command interpreter for AirBnB clone."""
 
     prompt = "(hbnb) "
 
     def do_quit(self, arg):
         """Quit command to exit the program."""
         return True
-    
+
     def do_EOF(self, arg):
-        """Exit the program on EOF (Ctrl+D)."""
+        """End of file command to exit the program."""
         return True
-    
+
+    def emptyline(self):
+        """Do nothing on empty input."""
+        pass
+
     def do_help(self, arg):
-        """Override the help command to include custom commands."""
+        """Display help information for commands."""
         super().do_help(arg)
 
-        def emptyline(self):
-            """Do nothing on empty line + ENTER."""
-            pass
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
