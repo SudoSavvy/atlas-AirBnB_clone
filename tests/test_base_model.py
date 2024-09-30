@@ -1,8 +1,14 @@
 import unittest
 import os
 import sys
-from models.base_model import BaseModel  # Ensure this import is correct
-from models.file_storage import FileStorage  # Ensure this import is correct
 
-# Add the models directory to the path if needed
+# Add the models directory to the path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../models')))
+
+from base_model import BaseModel  # Ensure correct import
+from file_storage import FileStorage  # Ensure correct import
+
+class TestBaseModel(unittest.TestCase):
+    """Test cases for the BaseModel class."""
+
+    # Your test methods go here...
