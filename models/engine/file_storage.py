@@ -1,39 +1,48 @@
 import json
-from models.base_model import BaseModel
+import os
 
 class FileStorage:
-    """Serializes instances to a JSON file & deserializes JSON file to instances."""
-
-    __file_path = "file.json"
+    """Class to manage file storage for AirBnB clone."""
+    __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
-        """Returns the dictionary __objects."""
-        return self.__objects
+    def all(self, cls=None):
+        """Returns a dictionary of all objects or all objects of a specific class."""
+        if cls is None:
+            return self.__objects
+        else:
+            return {key: value for key, value in self.__objects.items() if isinstance(value, cls)}
+
+    def get(self, cls_name, obj_id):
+        """Retrieves an object based on its class name and id."""
+        key = f"{cls_name}.{obj_id}"
+        return self.__objects.get(key)
 
     def new(self, obj):
-        """Sets in __objects the obj with key <obj class name>.id."""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        """Adds a new object to the storage."""
+        key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file."""
-        obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
-        try:
-            with open(self.__file_path, 'w') as f:
-                json.dump(obj_dict, f)
-        except Exception as e:
-            pass  # Ensure no output
+        """Saves all objects to the JSON file."""
+        with open(self.__file_path, 'w') as f:
+            json.dump({key: obj.to_dict() for key, obj in self.__objects.items()}, f)
 
     def reload(self):
-        """Deserializes the JSON file to __objects (if it exists)."""
-        try:
+        """Loads objects from the JSON file."""
+        if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r') as f:
-                obj_dict = json.load(f)
-                for key, value in obj_dict.items():
-                    class_name = value.get("__class__")
-                    if class_name == "BaseModel":
-                        self.__objects[key] = BaseModel(**value)
-                    # Optionally, handle more dynamic class loading here if needed
-        except (FileNotFoundError, json.JSONDecodeError):
-            pass  # Silence errors for checker compatibility
+                objects = json.load(f)
+                for key, value in objects.items():
+                    cls_name = value['__class__']
+                    cls = globals()[cls_name]
+                    self.__objects[key] = cls(**value)
+
+    def destroy(self, cls_name, obj_id):
+        """Deletes an instance based on the class name and id."""
+        key = f"{cls_name}.{obj_id}"
+        if key in self.__objects:
+            del self.__objects[key]
+            self.save()
+            return True
+        return False
