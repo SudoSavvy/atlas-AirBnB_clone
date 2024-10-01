@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module that sets up the models package."""
-from models.engine.file_storage import FileStorage
+from models import storage  # Ensure the storage engine is imported correctly
 
 # Create a unique FileStorage instance for the project
 storage = FileStorage()
