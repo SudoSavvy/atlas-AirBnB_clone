@@ -1,10 +1,12 @@
-import cmd  # Importing the cmd module to create command-line interpreters
+import cmd  # Importing the cmd module to create command-line interpreters 
 from models import storage  # Importing the storage module for data persistence
+from models.base_model import BaseModel  # Importing the BaseModel class
 from models.place import Place  # Importing the Place class
 from models.state import State  # Importing the State class
 from models.city import City  # Importing the City class
 from models.amenity import Amenity  # Importing the Amenity class
 from models.review import Review  # Importing the Review class
+
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter for the AirBnB clone."""  # Documentation for the class
@@ -125,6 +127,7 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, line):
         """Handles end of file."""  # Documentation for EOF command
         return True  # Returning True to exit the command loop
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()  # Starting the command interpreter loop
