@@ -1,13 +1,13 @@
-from models.base_model import BaseModel  # Importing the BaseModel class for inheritance
+from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """Represents a review for Airbnb."""  # Documentation for the Review class
+    """Represents a review for Airbnb."""
 
-    place_id = ""  # Public class attribute to store the ID of the place being reviewed
-    user_id = ""  # Public class attribute to store the ID of the user who made the review
-    text = ""  # Public class attribute to store the text of the review
+    place_id = ""
+    user_id = ""
+    text = ""
 
     def __init__(self, *args, **kwargs):
-        """Initializes a Review instance."""  # Documentation for the constructor
-        super().__init__(*args, **kwargs)  # Calling the constructor of the parent class (BaseModel) to initialize inherited attributes
+        """Initializes a Review instance."""
+        super().__init__(*args, **kwargs)
