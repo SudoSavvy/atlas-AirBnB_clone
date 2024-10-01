@@ -4,6 +4,9 @@ import uuid  # Importing uuid to generate unique identifiers for each instance.
 class BaseModel:
     """Base class for all models in the AirBnB clone project."""
 
+    def __str__(self):
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+
     def __init__(self, *args, **kwargs):
         """
         Initializes a new instance of BaseModel.
