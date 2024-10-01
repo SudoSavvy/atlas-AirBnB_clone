@@ -1,9 +1,4 @@
-#!/usr/bin/python3
-"""Module that sets up the models package."""
-from models import storage  # Ensure the storage engine is imported correctly
+from models.engine.file_storage import FileStorage  # Import the FileStorage class
 
-# Create a unique FileStorage instance for the project
-storage = FileStorage()
-
-# Call reload to load storage data from the JSON file
-storage.reload()
+storage = FileStorage()  # Create a single instance of the storage engine
+storage.reload()  # Load existing data from the file system
